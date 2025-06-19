@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   return NextResponse.json(
-    { success: false, error: "addBankAccount API not implemented." },
+    { success: false, error: "Adding a bank account is not available yet. Please contact support or try again later." },
     { status: 501 }
   );
 } 

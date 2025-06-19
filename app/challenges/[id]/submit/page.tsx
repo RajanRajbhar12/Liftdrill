@@ -10,7 +10,11 @@ import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 import { submitVideo } from "@/lib/actions"
 
-export default function SubmitVideoPage({ params }: { params: { id: string } }) {
+interface Props {
+  params: { id: string }
+}
+
+export default function SubmitPage({ params }: Props) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [videoFile, setVideoFile] = useState<File | null>(null)
@@ -49,12 +53,11 @@ export default function SubmitVideoPage({ params }: { params: { id: string } }) 
       formData.append("score", "0") // Default score, can be updated later
 
       const result = await submitVideo(formData)
-      
       if (result.success) {
         toast.success("Video submitted successfully!")
         router.push(`/challenges/${params.id}`)
       } else {
-        throw new Error(result.error || "Failed to submit video")
+        throw new Error("Failed to submit video")
       }
     } catch (error: any) {
       toast.error(error.message || "Failed to submit video")

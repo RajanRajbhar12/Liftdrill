@@ -143,8 +143,8 @@ function PrizeDistribution({ distribution }: { distribution: PrizeDistribution[]
   )
 }
 
-export default function ChallengePage({ params }: { params: Promise<{ id: string }> }) {
-  const { id: challengeId } = use(params)
+export default function ChallengePage({ params }: { params: { id: string } }) {
+  const challengeId = params.id
   const router = useRouter()
   const [challenge, setChallenge] = useState<Challenge | null>(null)
   const [loading, setLoading] = useState(true)
