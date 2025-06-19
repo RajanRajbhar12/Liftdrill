@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { use } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -143,11 +142,11 @@ function PrizeDistribution({ distribution }: { distribution: PrizeDistribution[]
   )
 }
 
-interface Props {
+interface ChallengePageProps {
   params: { id: string }
 }
 
-export default function ChallengePage({ params }: Props) {
+export default function ChallengePage({ params }: ChallengePageProps) {
   const challengeId = params.id
   const router = useRouter()
   const [challenge, setChallenge] = useState<Challenge | null>(null)
@@ -375,7 +374,7 @@ export default function ChallengePage({ params }: Props) {
                   </div>
                   <div className="text-white font-semibold">
                     {challenge.participants_count}
-                    {challenge.max_participants && ` / ${challenge.max_participants}`}
+                    {challenge.maxParticipants && ` / ${challenge.maxParticipants}`}
                   </div>
                 </div>
                 <div className="bg-white/10 rounded-xl p-4 backdrop-blur-sm">
@@ -392,7 +391,7 @@ export default function ChallengePage({ params }: Props) {
 
             <div className="bg-white/10 rounded-xl p-6 backdrop-blur-sm">
               <div className="text-center mb-4">
-                <div className="text-3xl font-bold text-white mb-1">₹{challenge.prize_pool}</div>
+                <div className="text-3xl font-bold text-white mb-1">₹{challenge.prizePool}</div>
                 <div className="text-blue-200 font-medium">Total Prize Pool</div>
               </div>
               <div className="space-y-3">
@@ -404,10 +403,10 @@ export default function ChallengePage({ params }: Props) {
                   <span className="font-medium">Participants</span>
                   <span className="font-bold">{challenge.participants_count}</span>
                 </div>
-                {challenge.max_participants && (
+                {challenge.maxParticipants && (
                   <div className="flex justify-between items-center text-white">
                     <span className="font-medium">Max Participants</span>
-                    <span className="font-bold">{challenge.max_participants}</span>
+                    <span className="font-bold">{challenge.maxParticipants}</span>
                   </div>
                 )}
                 <div className="flex justify-between items-center text-white">
@@ -503,7 +502,7 @@ export default function ChallengePage({ params }: Props) {
                             <Trophy className="h-6 w-6 text-yellow-500" />
                             <span className="font-medium">1st Place</span>
                           </div>
-                          <span className="font-bold text-lg">₹{Math.round(challenge.prize_pool).toLocaleString()}</span>
+                          <span className="font-bold text-lg">₹{Math.round(challenge.prizePool).toLocaleString()}</span>
                         </div>
                       )}
                       {challenge.prize_distribution === 'top_3_split' && (
@@ -513,21 +512,21 @@ export default function ChallengePage({ params }: Props) {
                               <Trophy className="h-6 w-6 text-yellow-500" />
                               <span className="font-medium">1st Place</span>
                             </div>
-                            <span className="font-bold text-lg">₹{Math.round(challenge.prize_pool * 0.5).toLocaleString()}</span>
+                            <span className="font-bold text-lg">₹{Math.round(challenge.prizePool * 0.5).toLocaleString()}</span>
                           </div>
                           <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
                             <div className="flex items-center gap-3">
                               <Trophy className="h-6 w-6 text-gray-400" />
                               <span className="font-medium">2nd Place</span>
                             </div>
-                            <span className="font-bold text-lg">₹{Math.round(challenge.prize_pool * 0.3).toLocaleString()}</span>
+                            <span className="font-bold text-lg">₹{Math.round(challenge.prizePool * 0.3).toLocaleString()}</span>
                           </div>
                           <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
                             <div className="flex items-center gap-3">
                               <Trophy className="h-6 w-6 text-amber-600" />
                               <span className="font-medium">3rd Place</span>
                             </div>
-                            <span className="font-bold text-lg">₹{Math.round(challenge.prize_pool * 0.2).toLocaleString()}</span>
+                            <span className="font-bold text-lg">₹{Math.round(challenge.prizePool * 0.2).toLocaleString()}</span>
                           </div>
                         </>
                       )}
@@ -538,35 +537,35 @@ export default function ChallengePage({ params }: Props) {
                               <Trophy className="h-6 w-6 text-yellow-500" />
                               <span className="font-medium">1st Place</span>
                             </div>
-                            <span className="font-bold text-lg">₹{Math.round(challenge.prize_pool * 0.4).toLocaleString()}</span>
+                            <span className="font-bold text-lg">₹{Math.round(challenge.prizePool * 0.4).toLocaleString()}</span>
                           </div>
                           <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
                             <div className="flex items-center gap-3">
                               <Trophy className="h-6 w-6 text-gray-400" />
                               <span className="font-medium">2nd Place</span>
                             </div>
-                            <span className="font-bold text-lg">₹{Math.round(challenge.prize_pool * 0.25).toLocaleString()}</span>
+                            <span className="font-bold text-lg">₹{Math.round(challenge.prizePool * 0.25).toLocaleString()}</span>
                           </div>
                           <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
                             <div className="flex items-center gap-3">
                               <Trophy className="h-6 w-6 text-amber-600" />
                               <span className="font-medium">3rd Place</span>
                             </div>
-                            <span className="font-bold text-lg">₹{Math.round(challenge.prize_pool * 0.15).toLocaleString()}</span>
+                            <span className="font-bold text-lg">₹{Math.round(challenge.prizePool * 0.15).toLocaleString()}</span>
                           </div>
                           <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
                             <div className="flex items-center gap-3">
                               <Trophy className="h-6 w-6 text-blue-600" />
                               <span className="font-medium">4th Place</span>
                             </div>
-                            <span className="font-bold text-lg">₹{Math.round(challenge.prize_pool * 0.1).toLocaleString()}</span>
+                            <span className="font-bold text-lg">₹{Math.round(challenge.prizePool * 0.1).toLocaleString()}</span>
                           </div>
                           <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
                             <div className="flex items-center gap-3">
                               <Trophy className="h-6 w-6 text-blue-600" />
                               <span className="font-medium">5th Place</span>
                             </div>
-                            <span className="font-bold text-lg">₹{Math.round(challenge.prize_pool * 0.1).toLocaleString()}</span>
+                            <span className="font-bold text-lg">₹{Math.round(challenge.prizePool * 0.1).toLocaleString()}</span>
                           </div>
                         </>
                       )}
@@ -670,7 +669,7 @@ export default function ChallengePage({ params }: Props) {
               <CardContent className="space-y-4">
                 <div className="flex justify-between items-center p-3 bg-white rounded-lg">
                   <span className="text-gray-700">Prize Pool</span>
-                  <span className="font-bold text-xl text-blue-600">₹{(challenge?.prize_pool || 0).toLocaleString()}</span>
+                  <span className="font-bold text-xl text-blue-600">₹{(challenge?.prizePool || 0).toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-white rounded-lg">
                   <span className="text-gray-700">Entry Fee</span>
@@ -684,10 +683,10 @@ export default function ChallengePage({ params }: Props) {
                   <span className="text-gray-700">Participants</span>
                   <span className="font-bold">{challenge?.participants_count || 0}</span>
                 </div>
-                {challenge.max_participants && (
+                {challenge.maxParticipants && (
                   <div className="flex justify-between items-center p-3 bg-white rounded-lg">
                     <span className="text-gray-700">Max Participants</span>
-                    <span className="font-bold">{challenge.max_participants}</span>
+                    <span className="font-bold">{challenge.maxParticipants}</span>
                   </div>
                 )}
                 <div className="flex justify-between items-center p-3 bg-white rounded-lg">
@@ -700,7 +699,7 @@ export default function ChallengePage({ params }: Props) {
                 </div>
                 <div className="flex justify-between items-center p-3 bg-white rounded-lg">
                   <span className="text-gray-700">End Date</span>
-                  <span className="font-bold">{challenge?.end_date ? new Date(challenge.end_date).toLocaleDateString() : 'No end date set'}</span>
+                  <span className="font-bold">{challenge?.end_date ? new Date(challenge.endDate).toLocaleDateString() : 'No end date set'}</span>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
@@ -785,7 +784,7 @@ export default function ChallengePage({ params }: Props) {
                   <div className="bg-blue-50/50 p-4 rounded-xl">
                     <div className="flex justify-between items-center mb-2">
                       <span className="font-medium text-blue-900">Current Prize Pool</span>
-                      <span className="text-xl font-bold text-blue-700">₹{challenge.prize_pool}</span>
+                      <span className="text-xl font-bold text-blue-700">₹{challenge.prizePool}</span>
                     </div>
                     <p className="text-sm text-blue-600">Total amount to be won by participants.</p>
                   </div>
@@ -927,7 +926,7 @@ export default function ChallengePage({ params }: Props) {
                 <div className="flex justify-between"><span className="text-gray-600">Category</span><span className="font-medium text-blue-700">{challenge.category}</span></div>
                 <div className="flex justify-between"><span className="text-gray-600">Duration</span><span className="font-medium text-blue-700">{challenge.video_duration_limit}s</span></div>
                 <div className="flex justify-between"><span className="text-gray-600">Entry Fee</span><span className="font-medium text-blue-700">₹{challenge.entry_fee}</span></div>
-                <div className="flex justify-between"><span className="text-gray-600">Prize Pool</span><span className="font-medium text-blue-700">₹{challenge.prize_pool}</span></div>
+                <div className="flex justify-between"><span className="text-gray-600">Prize Pool</span><span className="font-medium text-blue-700">₹{challenge.prizePool}</span></div>
                 <div className="flex justify-between"><span className="text-gray-600">Scoring Method</span><span className="font-medium text-blue-700">{challenge.scoring_method}</span></div>
               </div>
             </div>
