@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useParams } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -142,12 +142,9 @@ function PrizeDistribution({ distribution }: { distribution: PrizeDistribution[]
   )
 }
 
-interface ChallengePageProps {
-  params: { id: string }
-}
-
-export default function ChallengePage({ params }: ChallengePageProps) {
-  const challengeId = params.id
+export default function ChallengePage() {
+  const params = useParams();
+  const challengeId = params.id as string;
   const router = useRouter()
   const [challenge, setChallenge] = useState<Challenge | null>(null)
   const [loading, setLoading] = useState(true)
