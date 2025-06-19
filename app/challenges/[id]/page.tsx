@@ -164,8 +164,6 @@ export default function ChallengePage() {
   const [isJoinDialogOpen, setIsJoinDialogOpen] = useState(false)
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false)
   const [submitStep, setSubmitStep] = useState(1)
-  const [score, setScore] = useState('')
-  const [notes, setNotes] = useState('')
   
   useEffect(() => {
     const loadChallenge = async () => {
@@ -280,22 +278,20 @@ export default function ChallengePage() {
   }
 
   const handleSubmitVideo = async () => {
-    if (!challenge || !videoUrl || !score) return
+    if (!challenge || !videoUrl) return
 
     setIsSubmitting(true)
     try {
       const formData = new FormData()
       formData.append('challengeId', challenge.id.toString())
       formData.append('videoUrl', videoUrl)
-      formData.append('score', score)
-      formData.append('notes', notes)
       const result = await submitVideo(formData) as SubmissionResult
       if (result.success) {
         toast.success("Video submitted successfully!")
         setIsSubmitDialogOpen(false)
         setHasSubmitted(true)
-        // Refresh the page to update the UI
-        window.location.reload()
+        router.push("/challenges")
+        return
       } else {
         toast.error(result.error || "Failed to submit video")
       }
@@ -493,7 +489,7 @@ export default function ChallengePage() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {challenge.prize_distribution === 'winner_takes_all' && (
+                      {challenge.prize_distribution === 'winner_takes_all' && challenge.prizePool > 0 ? (
                         <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
                           <div className="flex items-center gap-3">
                             <Trophy className="h-6 w-6 text-yellow-500" />
@@ -501,70 +497,42 @@ export default function ChallengePage() {
                           </div>
                           <span className="font-bold text-lg">₹{Math.round(challenge.prizePool).toLocaleString()}</span>
                         </div>
-                      )}
-                      {challenge.prize_distribution === 'top_3_split' && (
+                      ) : challenge.prize_distribution === 'top_3_split' && challenge.prizePool > 0 ? (
                         <>
                           <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
                             <div className="flex items-center gap-3">
                               <Trophy className="h-6 w-6 text-yellow-500" />
                               <span className="font-medium">1st Place</span>
                             </div>
-                            <span className="font-bold text-lg">₹{Math.round(challenge.prizePool * 0.5).toLocaleString()}</span>
+                            <span className="font-bold text-lg">₹{isNaN(challenge.prizePool * 0.5) ? 0 : Math.round(challenge.prizePool * 0.5).toLocaleString()}</span>
                           </div>
                           <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
                             <div className="flex items-center gap-3">
                               <Trophy className="h-6 w-6 text-gray-400" />
                               <span className="font-medium">2nd Place</span>
                             </div>
-                            <span className="font-bold text-lg">₹{Math.round(challenge.prizePool * 0.3).toLocaleString()}</span>
+                            <span className="font-bold text-lg">₹{isNaN(challenge.prizePool * 0.3) ? 0 : Math.round(challenge.prizePool * 0.3).toLocaleString()}</span>
                           </div>
                           <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
                             <div className="flex items-center gap-3">
                               <Trophy className="h-6 w-6 text-amber-600" />
                               <span className="font-medium">3rd Place</span>
                             </div>
-                            <span className="font-bold text-lg">₹{Math.round(challenge.prizePool * 0.2).toLocaleString()}</span>
+                            <span className="font-bold text-lg">₹{isNaN(challenge.prizePool * 0.2) ? 0 : Math.round(challenge.prizePool * 0.2).toLocaleString()}</span>
                           </div>
                         </>
-                      )}
-                      {challenge.prize_distribution === 'top_5_split' && (
-                        <>
-                          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
-                            <div className="flex items-center gap-3">
-                              <Trophy className="h-6 w-6 text-yellow-500" />
-                              <span className="font-medium">1st Place</span>
-                            </div>
-                            <span className="font-bold text-lg">₹{Math.round(challenge.prizePool * 0.4).toLocaleString()}</span>
+                      ) : (
+                        <div className="flex items-center gap-4 bg-blue-50/50 p-4 rounded-xl">
+                          <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                            <Trophy className="h-6 w-6 text-blue-600" />
                           </div>
-                          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
-                            <div className="flex items-center gap-3">
-                              <Trophy className="h-6 w-6 text-gray-400" />
-                              <span className="font-medium">2nd Place</span>
+                          <div className="flex-grow">
+                            <div className="flex justify-between items-center mb-1">
+                              <span className="font-semibold text-blue-900 tracking-tight">No prizes set</span>
                             </div>
-                            <span className="font-bold text-lg">₹{Math.round(challenge.prizePool * 0.25).toLocaleString()}</span>
+                            <p className="text-sm text-blue-600">Prize distribution will be updated soon.</p>
                           </div>
-                          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
-                            <div className="flex items-center gap-3">
-                              <Trophy className="h-6 w-6 text-amber-600" />
-                              <span className="font-medium">3rd Place</span>
-                            </div>
-                            <span className="font-bold text-lg">₹{Math.round(challenge.prizePool * 0.15).toLocaleString()}</span>
-                          </div>
-                          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
-                            <div className="flex items-center gap-3">
-                              <Trophy className="h-6 w-6 text-blue-600" />
-                              <span className="font-medium">4th Place</span>
-                            </div>
-                            <span className="font-bold text-lg">₹{Math.round(challenge.prizePool * 0.1).toLocaleString()}</span>
-                          </div>
-                          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
-                            <div className="flex items-center gap-3">
-                              <Trophy className="h-6 w-6 text-blue-600" />
-                              <span className="font-medium">5th Place</span>
-                            </div>
-                            <span className="font-bold text-lg">₹{Math.round(challenge.prizePool * 0.1).toLocaleString()}</span>
-                          </div>
-                        </>
+                        </div>
                       )}
                     </div>
                   </CardContent>
@@ -852,39 +820,17 @@ export default function ChallengePage() {
               {submitStep === 2 && (
                 <div>
                   <h2 className="text-xl font-bold text-blue-900 mb-2">Review & Submit</h2>
-                  <p className="text-gray-700 mb-4">Review your recording and provide your score before submitting.</p>
+                  <p className="text-gray-700 mb-4">Review your recording before submitting.</p>
                   {/* Video Preview */}
                   <div className="w-full max-w-xl aspect-video rounded-lg overflow-hidden border border-blue-200 bg-black mb-4 mx-auto">
                     <video
                       src={videoUrl}
                       controls
+                      autoPlay
                       className="w-full h-full object-contain bg-black"
                     >
                       Sorry, your browser does not support embedded videos.
                     </video>
-                  </div>
-                  <div className="mb-4">
-                    <Label htmlFor="score" className="text-blue-900 font-medium">Your Score *</Label>
-                    <Input
-                      id="score"
-                      type="number"
-                      min="0"
-                      placeholder="Enter your score based on rep count"
-                      value={score}
-                      onChange={(e) => setScore(e.target.value)}
-                      className="rounded-lg border-blue-200 focus:border-blue-400 mt-1"
-                      required
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <Label htmlFor="notes" className="text-blue-900 font-medium">Additional Notes</Label>
-                    <Textarea
-                      id="notes"
-                      placeholder="Any additional information about your attempt..."
-                      value={notes}
-                      onChange={(e) => setNotes(e.target.value)}
-                      className="rounded-lg border-blue-200 focus:border-blue-400 mt-1"
-                    />
                   </div>
                   <div className="flex gap-2">
                     <Button
@@ -896,7 +842,7 @@ export default function ChallengePage() {
                     </Button>
                     <Button
                       onClick={handleSubmitVideo}
-                      disabled={isSubmitting || !videoUrl || !score}
+                      disabled={isSubmitting || !videoUrl}
                       className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold text-lg py-3 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-colors disabled:opacity-50"
                     >
                       {isSubmitting ? (

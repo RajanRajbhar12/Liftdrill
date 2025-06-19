@@ -29,8 +29,6 @@ export default function UploadPage() {
 
   // Challenge state
   const [challenge, setChallenge] = useState<any>(null)
-  const [score, setScore] = useState("")
-  const [notes, setNotes] = useState("")
   const [uploading, setUploading] = useState(false)
   const [progress, setProgress] = useState(0)
   const [activeTab, setActiveTab] = useState("record")
@@ -226,9 +224,9 @@ export default function UploadPage() {
   }
 
   const submitRecording = async () => {
-    if (!recordedBlob || !score || !challengeId) {
+    if (!recordedBlob || !challengeId) {
       toast.error("Missing information", {
-        description: "Please provide both a recording and your score"
+        description: "Please provide a recording"
       })
       return
     }
@@ -241,9 +239,6 @@ export default function UploadPage() {
       const formData = new FormData()
       formData.append("video", file)
       formData.append("challengeId", challengeId)
-      formData.append("score", score)
-      formData.append("notes", notes)
-
       const result = await submitVideo(formData)
 
       if (result.success) {
@@ -683,7 +678,7 @@ export default function UploadPage() {
                         Review & Submit
                       </CardTitle>
                       <CardDescription className="text-green-700">
-                        Review your recording and provide your score
+                        Review your recording before submitting.
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
@@ -691,60 +686,28 @@ export default function UploadPage() {
                       <div className="aspect-video bg-black rounded-lg overflow-hidden">
                         <video
                           ref={playbackRef}
+                          src={recordedUrl || undefined}
                           controls
                           className="w-full h-full object-cover"
                         />
                       </div>
-
-                      {/* Submission Form */}
-                      <div className="space-y-6">
-                        <div className="space-y-2">
-                          <Label htmlFor="score" className="text-lg font-medium">Your Score *</Label>
-                          <Input
-                            id="score"
-                            type="number"
-                            placeholder="Enter your score"
-                            value={score}
-                            onChange={(e) => setScore(e.target.value)}
-                            className="h-12 text-lg"
-                            required
-                          />
-                          <p className="text-sm text-gray-500">
-                            Enter your score based on {challenge.scoring_method}
-                          </p>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="notes" className="text-lg font-medium">Additional Notes</Label>
-                          <Textarea
-                            id="notes"
-                            placeholder="Any additional information about your attempt..."
-                            className="min-h-[120px] text-lg"
-                            value={notes}
-                            onChange={(e) => setNotes(e.target.value)}
-                          />
-                        </div>
-
-                        <Separator />
-
-                        <Button
-                          onClick={submitRecording}
-                          disabled={uploading || !score}
-                          className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800"
-                        >
-                          {uploading ? (
-                            <div className="flex items-center gap-2">
-                              <Loader2 className="h-5 w-5 animate-spin" />
-                              Submitting...
-                            </div>
-                          ) : (
-                            <div className="flex items-center gap-2">
-                              <CheckCircle className="h-5 w-5" />
-                              Submit Video
-                            </div>
-                          )}
-                        </Button>
-                      </div>
+                      <Button
+                        onClick={submitRecording}
+                        disabled={uploading}
+                        className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800"
+                      >
+                        {uploading ? (
+                          <div className="flex items-center gap-2">
+                            <Loader2 className="h-5 w-5 animate-spin" />
+                            Submitting...
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <CheckCircle className="h-5 w-5" />
+                            Submit Video
+                          </div>
+                        )}
+                      </Button>
                     </CardContent>
                   </Card>
                 </TabsContent>

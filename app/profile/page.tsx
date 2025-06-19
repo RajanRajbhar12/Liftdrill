@@ -274,18 +274,6 @@ export default function ProfilePage() {
               </div>
             </CardContent>
           </Card>
-
-          <Card className="border-0 shadow-lg rounded-xl">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Total Spent</p>
-                  <h3 className="text-2xl font-bold mt-1">₹{(stats?.totalSpent ?? 0).toLocaleString()}</h3>
-                </div>
-                <Clock className="h-8 w-8 text-blue-600" />
-              </div>
-            </CardContent>
-          </Card>
         </div>
 
         {/* Main Content Tabs - Mobile Friendly */}
