@@ -143,7 +143,11 @@ function PrizeDistribution({ distribution }: { distribution: PrizeDistribution[]
   )
 }
 
-export default function ChallengePage({ params }: { params: { id: string } }) {
+interface Props {
+  params: { id: string }
+}
+
+export default function ChallengePage({ params }: Props) {
   const challengeId = params.id
   const router = useRouter()
   const [challenge, setChallenge] = useState<Challenge | null>(null)
