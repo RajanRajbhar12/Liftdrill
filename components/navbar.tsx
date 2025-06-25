@@ -13,13 +13,13 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Menu, X, Trophy, Plus, User, Settings, LogOut, Shield } from "lucide-react"
-import { getCurrentUser, signOut } from "@/lib/auth"
+import { getUserDetails, signOut } from "@/lib/auth"
 
 interface User {
   id: string
-  name: string
-  email: string
   username: string
+  full_name: string
+  email: string
   avatar_url?: string
   total_earnings?: number
   is_admin?: boolean
@@ -31,7 +31,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const userData = await getCurrentUser()
+      const userData = await getUserDetails()
       setUser(userData)
     }
     checkAuth()
@@ -94,15 +94,15 @@ export default function Navbar() {
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                       <Avatar className="h-10 w-10">
-                        <AvatarImage src={user.avatar_url || "/placeholder.svg?height=40&width=40"} alt={user.name} />
-                        <AvatarFallback>{user.name?.charAt(0) || "U"}</AvatarFallback>
+                        <AvatarImage src={user.avatar_url || "/placeholder.svg?height=40&width=40"} alt={user.full_name} />
+                        <AvatarFallback>{user.full_name?.charAt(0) || "U"}</AvatarFallback>
                       </Avatar>
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56" align="end" forceMount>
                     <div className="flex items-center justify-start gap-2 p-2">
                       <div className="flex flex-col space-y-1 leading-none">
-                        <p className="font-medium">{user.name}</p>
+                        <p className="font-medium">{user.full_name}</p>
                         <p className="w-[200px] truncate text-sm text-muted-foreground">{user.email}</p>
                         <div className="flex items-center gap-2 mt-1">
                           <Badge variant="secondary" className="text-xs">
@@ -199,11 +199,11 @@ export default function Navbar() {
                 <div className="pt-4 border-t border-gray-100">
                   <div className="flex items-center gap-3 mb-4">
                     <Avatar className="h-10 w-10">
-                      <AvatarImage src={user.avatar_url || "/placeholder.svg?height=40&width=40"} alt={user.name} />
-                      <AvatarFallback>{user.name?.charAt(0) || "U"}</AvatarFallback>
+                      <AvatarImage src={user.avatar_url || "/placeholder.svg?height=40&width=40"} alt={user.full_name} />
+                      <AvatarFallback>{user.full_name?.charAt(0) || "U"}</AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-medium">{user.name}</p>
+                      <p className="font-medium">{user.full_name}</p>
                       <p className="text-sm text-gray-500">₹{user.total_earnings?.toLocaleString() || "0"} earned</p>
                     </div>
                   </div>

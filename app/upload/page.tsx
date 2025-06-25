@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -22,7 +22,7 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Separator } from "@/components/ui/separator"
 
-export default function UploadPage() {
+function UploadPageInner() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const challengeId = searchParams.get("challengeId")
@@ -780,5 +780,13 @@ export default function UploadPage() {
         </div>
       )}
     </div>
+  )
+}
+
+export default function UploadPage() {
+  return (
+    <Suspense>
+      <UploadPageInner />
+    </Suspense>
   )
 }
